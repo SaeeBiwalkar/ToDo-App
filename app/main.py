@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import HTMLResponse
 from app.database import engine
 from app.models import Base
 from app.routes.todos import router as todo_router
@@ -41,4 +42,6 @@ app.include_router(todo_router, prefix="/todos", tags=["ToDos"])
 # The root endpoint will now render the index.html file
 @app.get("/")
 async def root():
-    return {"message": "Welcome to the To-Do Reminder App"}
+    # Return the index.html page when visiting the root URL
+    with open("ui/index.html", "r") as f:
+        return HTMLResponse(content=f.read())
