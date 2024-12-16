@@ -3,7 +3,7 @@
 
 ## Overview
 
-This To-Do Reminder App provides a simple way to manage tasks. It exposes RESTful APIs to create, view, update, delete individual tasks, and delete all tasks. The app uses FastAPI for the backend, PostgreSQL for the database, and a simple HTML, CSS, and JavaScript frontend for interaction.
+ To-Do Reminder App allows users to manage tasks with functionalities to create, view, update, and delete individual tasks, as well as delete all tasks at once. The app exposes RESTful APIs for these operations and is built with FastAPI for the backend, PostgreSQL for the database, and a simple HTML, CSS, and JavaScript frontend for interaction.
 
 ## Features
 
@@ -18,66 +18,84 @@ This To-Do Reminder App provides a simple way to manage tasks. It exposes RESTfu
 - **Database:** PostgreSQL
 - **Frontend:** HTML, CSS, JavaScript
 
-## Setup
+## Setup Guide
+
+ The steps required to set up and run the To-Do Reminder App locally.
 
 ### Requirements
 
-Make sure you have the following installed:
+Main softwares required ffor the application:
 
-- Python 3.7+  
-- PostgreSQL (or you can use MongoDB if preferred)
+- Python 3.7+
+- PostgreSQL (or MongoDB if preferred)
 - pip (Python package installer)
 
 ### Installation
 
-1. Clone the repository:
+1. **Clone the repository:**
+
+    Clone the GitHub repository to local machine:
 
     ```bash
-    git clone https://github.com/yourusername/todo-reminder-app.git
-    cd todo-reminder-app
+    git clone https://github.com/SaeeBiwalkar/ToDo-App.git
+    cd ToDo-App
     ```
 
-2. Install dependencies:
+2. **Install dependencies:**
+
+    Install all required Python packages using the `requirements.txt` file:
 
     ```bash
     pip install -r requirements.txt
     ```
 
-3. Set up PostgreSQL database:
+3. **Set up PostgreSQL Database:**
 
-    Create a new database called `todo_db` in your PostgreSQL instance:
+    Create a new PostgreSQL database called `todo_db` (if you are using PostgreSQL):
 
     ```bash
     CREATE DATABASE todo_db;
     ```
 
-4. Update the `DATABASE_URL` in `app/database.py` with your PostgreSQL credentials:
+4. **Configure Database URL:**
+
+    Update the `DATABASE_URL` in `app/database.py` with PostgreSQL credentials. It should look like this:
 
     ```python
     DATABASE_URL = "postgresql://postgres:password@localhost:5432/todo_db"
     ```
 
-5. Run the app:
+5. **Run the application:**
+
+    Start the FastAPI app locally using Uvicorn:
 
     ```bash
     uvicorn app.main:app --reload
     ```
 
-    This will start the FastAPI app on `http://127.0.0.1:8000`.
+    The app will run on `http://127.0.0.1:8000`.
 
-6. Open `index.html` in your browser to interact with the app.
+6. **Frontend Interaction:**
+
+    Open `ui/index.html` in browser to interact with the app's frontend.
 
 ### Testing
 
-The application is equipped with test cases for each API endpoint. To run tests, make sure the app is running and execute:
+The app comes with test cases for each of the API endpoints to ensure the functionality of all CRUD operations (Create, Read, Update, Delete). To run the tests, follow these steps:
 
-```bash
-pytest
-```
+1. Run the app first.
 
-The tests will check the functionality of all the CRUD operations (create, read, update, delete) for To-Do tasks.
+2. Run the test cases using `pytest`:
+
+    ```bash
+    pytest
+    ```
+
+    This will execute all the test cases and check that the app's functionality is working as expected.
 
 ## API Endpoints
+
+Here is the list of available API endpoints in the app:
 
 ### 1. Create a To-Do Task
 
@@ -116,9 +134,23 @@ The tests will check the functionality of all the CRUD operations (create, read,
   ]
   ```
 
-### 3. Edit a To-Do Task
+### 3. Get a Single To-Do Task by ID
 
-- **PUT** `/todos/{id}`
+- **GET** `/todos/{todo_id}`
+- Response: 
+  ```json
+  {
+    "id": 1,
+    "title": "Task Title",
+    "description": "Task Description",
+    "status": "Pending",
+    "created_at": "2024-12-15T10:00:00"
+  }
+  ```
+
+### 4. Edit a To-Do Task
+
+- **PUT** `/todos/{todo_id}`
 - Request body:
   ```json
   {
@@ -137,21 +169,52 @@ The tests will check the functionality of all the CRUD operations (create, read,
   }
   ```
 
-### 4. Delete a To-Do Task
+### 5. Delete a To-Do Task
 
-- **DELETE** `/todos/{id}`
+- **DELETE** `/todos/{todo_id}`
 - Response: No content (200 OK)
 
-### 5. Delete All To-Do Tasks
+### 6. Delete All To-Do Tasks
 
 - **DELETE** `/todos`
 - Response: No content (200 OK)
 
 ## Hosting
 
-The app can be hosted on any free hosting platform. For example:
-- Render
+The app has been deployed to Render and can be accessed at the following URL: [Render App](https://todo-app-si20.onrender.com/).
 
-Make sure to deploy the backend and frontend correctly by updating API URLs if necessary.
 
+## File Structure
+
+Here’s a breakdown of the project’s file structure:
+
+```
+ToDo-App/
+│
+├── app/
+│   ├── __init__.py
+│   ├── crud.py
+│   ├── database.py
+│   ├── main.py
+│   ├── models.py
+│   ├── routes/
+│   │   └── todos.py
+│   ├── schemas.py
+│   └── tests/
+│       └── test_todos.py
+│
+├── ui/
+│   |── index.html
+|   |── style.css
+|   └── scrip.js
+│
+├── requirements.txt
+└── README.md
+```
+
+## Notes
+
+- **Database Design:** The database uses PostgreSQL with a simple `todos` table that holds tasks with columns such as `id`, `title`, `description`, `status`, and `created_at`.
+- **Modularization:** The app is organized in modules to separate CRUD operations, database interactions, and route definitions for better maintainability.
+- **Security:** Ensure that sensitive information (like database credentials) is handled securely, especially in production environments. For this project, it's handled via the `DATABASE_URL` in the `database.py` file.
 
