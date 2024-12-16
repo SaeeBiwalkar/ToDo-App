@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://todo-app-si20.onrender.com/"; // Ensure this is the correct URL
+const API_BASE_URL = "https://todo-app-si20.onrender.com/todos";
 
 // Fetch and display tasks
 function fetchTasks() {
