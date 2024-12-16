@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware  # Import CORS middleware
-from fastapi.staticfiles import StaticFiles  # Import StaticFiles to serve static files
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from app.database import engine
 from app.models import Base
 from app.routes.todos import router as todo_router
@@ -18,18 +18,19 @@ app.add_middleware(
 )
 
 # Serve static files (HTML, CSS, JS) from the 'ui' folder
-app.mount("/", StaticFiles(directory="ui", html=True), name="static")
+app.mount("/ui", StaticFiles(directory="ui", html=True), name="static")
 
+# Database setup and routes
 from app.database import SessionLocal
 from sqlalchemy.orm import Session
 
 # Dependency to get the DB session
 def get_db():
-    db = SessionLocal()  # Creates a new database session
+    db = SessionLocal()
     try:
-        yield db  # Makes the session available to the route function
+        yield db
     finally:
-        db.close()  # Closes the session after the route finishes
+        db.close()
 
 # Create database tables (if not already created)
 Base.metadata.create_all(bind=engine)
@@ -37,7 +38,7 @@ Base.metadata.create_all(bind=engine)
 # Include the To-Do routes
 app.include_router(todo_router, prefix="/todos", tags=["ToDos"])
 
-# Root endpoint - This will serve your index.html file
+# The root endpoint will now render the index.html file
 @app.get("/")
 async def root():
     return {"message": "Welcome to the To-Do Reminder App"}
